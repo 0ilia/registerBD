@@ -1,0 +1,15 @@
+#register:hover {
+    cursor: pointer;
+    color: plum;
+}
+
+#authorization:hover  {
+    cursor: pointer;
+    color: plum;
+}
+#reg{
+    display: none;
+}
+#aut{
+    display: none;
+}
