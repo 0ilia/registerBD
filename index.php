@@ -1,3 +1,7 @@
+<?php
+require_once "bd.php";
+
+?>
 <!doctype html>
 <html >
 <head>
@@ -10,35 +14,32 @@
 </head>
 <body>
 
+<?
+if (empty($_SESSION['auth'])) {
+    if ((!empty($_COOKIE['login'])) && (!empty($_COOKIE['key']))) {
 
-<h3  id="register">Регистрация</h3>
-<h3  id="authorization">Авторизация </h3>
+        $login = $_COOKIE['login'];
+        $key = $_COOKIE['key']; //ключ из кук (аналог пароля, в базе поле cookie)
+        $user = R::findOne('users', 'login = ?', array($login));
 
-<div id="reg">
-    <form action="php/reg.php">
-        <label for="login">Логин:</label><br>
-        <input required id="login" type="text"><br>
 
-        <label for="email">Ваш E-Mail:</label><br>
-        <input required id="email" type="email"><br>
-        <label for="password">Пароль:</label><br>
-        <input required type="password" id="password"><br>
-        <label  for="confirm_password">Повторите пароль:</label><br>
-        <input required type="password" id="confirm_password"><br> <br>
-        <input type="submit">
-    </form>
-</div>
+        if ($user->cookie == $key) {
+            $_SESSION['auth'] = true;
+            $_SESSION['login'] = $user->login;
+        }
 
-<div id="aut">
-    <form action="php/aut.php">
-        <label for="login">Логин:</label><br>
-        <input required id="login" type="text"><br>
-
-        <label for="password">Пароль:</label><br>
-        <input required type="password" id="password"><br><br>
-        <input type="submit">
-    </form>
-</div>
+    }
+}
+    if ((!isset($_SESSION['a'])) && (!isset($_SESSION['login']))) { ?>
+    <h3><a href="signup.php" id="register">Регистрация</a></h3><br>
+    <h3><a  href="login.php" id="authorization">Авторизация </a></h3>
+<?}else{
+    echo "Привет,". $_SESSION['login'];
+  ?>
+        <form action="logout.php" method="post" id="exitForm">
+            <input type="submit" value="Выход" name="logout">
+        </form>
+<?}?>
 <script src="js/jquery.min.js"></script>
 <script src="js/index.js"></script>
 </body>
